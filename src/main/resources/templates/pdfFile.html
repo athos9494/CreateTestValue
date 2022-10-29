@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org" lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PDF</title>
+</head>
+<body>
+<p>请选择:</p>
+<form action="/pdfUtil/pdfConvert" method="post" enctype="multipart/form-data">
+    <label>
+        <select name="function">
+            <option value="0">PDF转WORD</option>
+            <option value="1">PDF转EXCEL</option>
+            <option value="2">PDF转图片</option>
+        </select>
+    </label>
+    选择上传文件: <br>
+    <input type="file" name="pdfFile">
+    <input type="submit" value="提交">
+</form>
+<p>PDF文件转换结果:</p>
+<p th:text="${msg}"></p>
+<a th:href="@{/pdfUtil/queryRst}" th:text="点击查询转换结果"></a>
+</body>
+</html>
+

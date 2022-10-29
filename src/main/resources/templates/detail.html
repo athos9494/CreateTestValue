@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>首页</title>
+</head>
+<body>
+<style>
+    .table11_6 table {
+        width: 100%;
+        margin: 15px 0;
+        border: 0;
+    }
+
+    .table11_6 th {
+        background-color: #96C7ED;
+        color: #000000
+    }
+
+    .table11_6, .table11_6 th, .table11_6 td {
+        font-size: 0.95em;
+        text-align: center;
+        padding: 4px;
+        border-collapse: collapse;
+    }
+
+    .table11_6 th, .table11_6 td {
+        border: 1px solid #73b4e7;
+        border-width: 1px 0 1px 0;
+        border: 2px inset #ffffff;
+    }
+
+    .table11_6 tr {
+        border: 1px solid #ffffff;
+    }
+
+    .table11_6 tr:nth-child(odd) {
+        background-color: #dcecf9;
+    }
+
+    .table11_6 tr:nth-child(even) {
+        background-color: #ffffff;
+    }
+</style>
+
+<table class="table11_6">
+    <!--            表头-->
+    <tr>
+        <th>id</th>
+        <th>姓名</th>
+        <th>出生日期</th>
+        <th>证件号</th>
+        <th>地址</th>
+    </tr>
+    <!--            表内容-->
+    <tr th:each="person:${pageInfo.getList()}">
+        <td th:text="${person.getId()}"></td>
+        <td th:text="${person.getName()}"></td>
+        <td th:text="${person.getBirth()}"></td>
+        <td th:text="${person.getId()}"></td>
+        <td th:text="${person.getAddr()}"></td>
+    </tr>
+</table>
+<!-- 分页 -->
+    <a th:href="@{/queryPerson(pageNum=1,pageSize=10)}">首页</a>
+<!--th:if true 可以点击-->
+    <a  th:if="${pageInfo.isHasPreviousPage()}==true"
+                   th:href="@{/queryPerson(pageNum=${pageInfo.getPageNum()-1},pageSize=10)}">上一页</a>
+    <a  th:if="${pageInfo.isHasNextPage()}==true"
+                   th:href="@{/queryPerson(pageNum=${pageInfo.getPageNum()+1},pageSize=10)}">下一页</a>
+    <a  th:href="@{/queryPerson(pageNum=${pageInfo.getPages()},pageSize=10)}">末页</a>
+    总页数: <s th:text="${pageInfo.getPages()}"></s>
+    当前页:<s th:text="${pageInfo.getPageNum()}"></s>
+
+</body>
+</html>
+

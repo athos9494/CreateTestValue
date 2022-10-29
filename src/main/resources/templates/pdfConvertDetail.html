@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org" lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>下载转换结果文件</title>
+</head>
+<body>
+<style>
+    .table11_6 table {
+        width: 100%;
+        margin: 15px 0;
+        border: 0;
+    }
+
+    .table11_6 th {
+        background-color: #96C7ED;
+        color: #000000
+    }
+
+    .table11_6, .table11_6 th, .table11_6 td {
+        font-size: 0.95em;
+        text-align: center;
+        padding: 4px;
+        border-collapse: collapse;
+    }
+
+    .table11_6 th, .table11_6 td {
+        border: 1px solid #73b4e7;
+        border-width: 1px 0 1px 0;
+        border: 2px inset #ffffff;
+    }
+
+    .table11_6 tr {
+        border: 1px solid #ffffff;
+    }
+
+    .table11_6 tr:nth-child(odd) {
+        background-color: #dcecf9;
+    }
+
+    .table11_6 tr:nth-child(even) {
+        background-color: #ffffff;
+    }
+</style>
+<table class="table11_6">
+    <!--            表头-->
+    <tr>
+        <th>id</th>
+        <th>原文件名</th>
+        <th>转换结果</th>
+    </tr>
+    <!--            表内容-->
+    <tr th:each="pdf:${fileList}">
+        <td th:text="${pdf.getId()}"></td>
+        <td th:text="${pdf.getRecv()}"></td>
+        <td>
+            <div th:switch="${pdf.getStatus()}">
+                <span th:case="0">失败</span>
+                <span th:case="1"><a th:href="@{/pdfUtil/downRstFile(id=${pdf.getId()})}">成功,点击进入下载界面</a></span>
+                <span th:case="2">处理中</span>
+            </div>
+        </td>
+    </tr>
+</table>
+</body>
+</html>
+

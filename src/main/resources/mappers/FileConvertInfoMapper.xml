@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.mystic.CreateTestValue.mapper.FileConvertInfoMapper">
+    <!--    useGeneratedKeys keyProperty 配合使用,表示数据库支持主键自增,以及主键字段名-->
+    <insert id="initFileInfo" useGeneratedKeys="true" keyProperty="id"
+            parameterType="com.mystic.CreateTestValue.entity.FileConvertInfoEntity">
+        insert into file_convert_info (recv)
+        values (#{recv})
+    </insert>
+    <update id="updateSendFile">
+        update file_convert_info
+        set send   = #{send},
+            status = #{status}
+        where recv = #{recv}
+    </update>
+    <delete id="deleteByRecv">
+        delete from file_convert_info where recv = #{filename}
+    </delete>
+    <select id="queryStatus" resultType="com.mystic.CreateTestValue.entity.FileConvertInfoEntity">
+        select *
+        from file_convert_info
+        order by id desc
+        limit 10
+    </select>
+    <select id="getFilenameById" resultType="java.lang.String">
+        select send from file_convert_info where id = #{id}
+    </select>
+
+
+</mapper>

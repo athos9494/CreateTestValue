@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html  xmlns="http://www.w3.org/1999/xhtml"
+       xmlns:th="http://www.thymeleaf.org"  lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>首页</title>
+</head>
+<body>
+<p>请选择:</p>
+<form action="/choose">
+    <label>
+        <select name="chooseParam">
+            <option value="0">创建person测试数据</option>
+            <option value="1">文件传输</option>
+            <option value="2">创建company测试数据</option>
+            <option value="3">PDF文件转格式</option>
+        </select>
+    </label>
+    <input type="submit" value="提交">
+</form>
+<p th:text="${msg}"></p>
+</body>
+</html>
+
