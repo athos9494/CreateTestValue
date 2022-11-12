@@ -28,6 +28,9 @@
     <select id="getFilenameById" resultType="java.lang.String">
         select send from file_convert_info where id = #{id}
     </select>
+    <select id="getFilenameByRecvName" resultType="java.lang.String">
+        select send from file_convert_info where recv = #{filename} order by id desc limit 1
+    </select>
 
 
 </mapper>

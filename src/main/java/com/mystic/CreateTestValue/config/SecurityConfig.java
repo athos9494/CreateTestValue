@@ -14,5 +14,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
 //       解决spring security 禁止post访问, 关闭csrf即可
         http.csrf().disable();
+//        继承默认资源不放行,否则不会跳转登录界面
+        super.configure(http);
     }
 }

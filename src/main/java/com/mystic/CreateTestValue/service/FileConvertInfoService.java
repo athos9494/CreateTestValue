@@ -38,4 +38,6 @@ public interface FileConvertInfoService {
      * @return 文件名
      */
     String getFilenameById(int id);
+
+    String getFilenameByRecvName(String filename);
 }

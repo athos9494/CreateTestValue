@@ -44,4 +44,6 @@ public interface FileConvertInfoMapper {
     String getFilenameById(@Param("id") int id);
 
     void deleteByRecv(@Param("filename") String filename);
+
+    String getFilenameByRecvName(@Param("filename") String filename);
 }

@@ -4,7 +4,7 @@ spring:
   security:
     user:
       name: admin
-      password: admin764321
+      password: admin123
   servlet:
     multipart:
       max-file-size: 100MB

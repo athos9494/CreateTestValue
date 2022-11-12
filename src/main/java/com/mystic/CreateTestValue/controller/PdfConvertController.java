@@ -13,6 +13,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.servlet.http.HttpServletResponse;
+import java.io.*;
+import java.net.URLEncoder;
 import java.util.List;
 import java.util.Objects;
 
@@ -26,6 +29,9 @@ import java.util.Objects;
 public class PdfConvertController {
 
     private static final String SUFFIX = ".pdf";
+    private static final String HOME_PATH = System.getProperty("user.home");
+    private static final String RECV_PATH = "/workspace/file/recv/";
+
 
     final PdfService pdfService;
     final FileConvertInfoService fileConvertInfoService;
@@ -50,8 +56,20 @@ public class PdfConvertController {
             }
 //            初始化转换明细表
             fileConvertInfoService.init(new FileConvertInfoEntity(filename, "", 2));
+            File recvFile = new File(HOME_PATH + RECV_PATH + filename);
 //            pdf文件转换doc
-            pdfService.pdfConvertToWord(pdfFile);
+            try (InputStream is = pdfFile.getInputStream(); OutputStream os = new FileOutputStream(recvFile)){
+                byte[] buf = new byte[1024];
+                int len;
+                while ((len = is.read(buf)) != -1){
+                    os.write(buf, 0, len);
+                }
+                os.flush();
+//           异步方法,无法获取multipart file,直接写成file传递
+                pdfService.pdfConvertToWord(recvFile);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
             model.addAttribute("msg", "接收文件成功,正在转换中");
             return "pdfFile";
         } else {
@@ -73,11 +91,40 @@ public class PdfConvertController {
     }
 
     @RequestMapping("/downRstFile")
-    public String downRstFile(@RequestParam("id") int id, Model model) {
+    public String downRstFile(@RequestParam("filename") String filename, Model model, HttpServletResponse response) {
 //        获取文件名
-        String sendFilename = fileConvertInfoService.getFilenameById(id);
-        String url = pdfService.getUrl(sendFilename);
-        model.addAttribute("fileUrl", url);
+        String sendFilename = fileConvertInfoService.getFilenameByRecvName(filename);
+//        文件路径最好配在表里
+        String sendPath = System.getProperty("user.home") + "/workspace/file/send/" + sendFilename;
+        if (StringUtils.isEmpty(sendPath)){
+            model.addAttribute("msg", "结果文件未生成或生成失败");
+            return "404";
+        }
+        File file = new File(sendPath);
+        if (!file.exists()) {
+            model.addAttribute("msg", "结果文件不存在");
+            return "404";
+        }
+        byte[] buf = new byte[1024];
+        int len;
+        try (InputStream is = new FileInputStream(file); OutputStream os = response.getOutputStream()) {
+            response.setContentType("application/force-download");
+            response.addHeader
+                    ("Content-Disposition", "attachment; filename=" + URLEncoder.encode(sendFilename, "UTF-8"));
+            response.setContentLength((int) file.length());
+            while ((len = is.read(buf)) != -1) {
+                os.write(buf, 0, len);
+            }
+            os.flush();
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    @RequestMapping("/download")
+    public String download() {
         return "download";
     }
 }

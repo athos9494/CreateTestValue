@@ -98,6 +98,15 @@
             <version>1.4.1</version>
         </dependency>
 
+<!--        引入外部依赖-->
+        <dependency>
+            <groupId>com.aspose</groupId>
+            <artifactId>aspose-pdf</artifactId>
+            <version>21.8</version>
+            <scope>system</scope>
+            <systemPath>${pom.basedir}/src/main/resources/lib/aspose-pdf-21.8.jar</systemPath>
+        </dependency>
+
     </dependencies>
 
     <dependencyManagement>
@@ -130,6 +139,8 @@
                 <version>2.3.7.RELEASE</version>
                 <configuration>
                     <mainClass>com.mystic.CreateTestValue.CreateTestValueApplication</mainClass>
+<!--                    引入外部依赖配置-->
+                    <includeSystemScope>true</includeSystemScope>
                 </configuration>
                 <executions>
                     <execution>

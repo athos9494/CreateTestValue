@@ -40,4 +40,9 @@ public class FileConvertInfoServiceImpl implements FileConvertInfoService {
     public String getFilenameById(int id) {
         return mapper.getFilenameById(id);
     }
+
+    @Override
+    public String getFilenameByRecvName(String filename) {
+        return mapper.getFilenameByRecvName(filename);
+    }
 }

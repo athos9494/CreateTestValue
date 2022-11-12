@@ -8,7 +8,10 @@
     <title>文件下载</title>
 </head>
 <body>
-    <a th:href="${fileUrl}">点击下载文件</a>
+<form action="/pdfUtil/downRstFile">
+    <input type="text" value="文件名" name="filename">
+    <input type="submit" value="提交">
+</form>
 </body>
 </html>
 
