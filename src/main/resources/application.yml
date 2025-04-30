@@ -1,39 +1,43 @@
 # 应用名称
 spring:
-#  spring security 用户密码
+  #  spring security 用户密码
   security:
     user:
       name: admin
-      password: admin123
+      password: ENC(a31NiOcZFvMq7fJvNcok5vAAbKxZq82D)
   servlet:
     multipart:
       max-file-size: 100MB
       enabled: true
   application:
     name: CreateTestValue
-# 数据库驱动：
+  # 数据库驱动：
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-# 数据源名称
+    # 数据源名称
     name: defaultDataSource
-# 数据库连接地址
-    url: jdbc:mysql://47.106.207.67:3306/test?useUnicode=true&characterEncoding=utf-8&serverTimezone=Asia/Shanghai&useSSL=false
+    # 数据库连接地址
+    url: jdbc:mysql://127.0.0.1:3306/test?useUnicode=true&characterEncoding=utf-8&serverTimezone=Asia/Shanghai&useSSL=true&allowPublicKeyRetrieval=true
 
     # 数据库用户名&密码：
     username: root
-    password: zzzs12138
+    password: ENC(jTujZLOLEVeVGSYReMDu2BAx69Hvgo2W)
 #下面这些内容是为了让MyBatis映射
 #指定Mybatis的Mapper文件
 mybatis:
   mapper-locations: classpath:mappers/*xml
-#指定Mybatis的实体目录
+  #指定Mybatis的实体目录
   type-aliases-package: com.mystic.CreateTestValue.entity
 
 
 # 指定端口
 server:
   port: 9777
-
-
+jasypt:
+  encryptor:
+    algorithm: PBEWithMD5AndDES
+    #    指定 Jasypt 加密过程中使用的 IV（Initialization Vector，初始化向量）生成策略
+    # 3.0.0以后版本必须指定该值, 否则
+    iv-generator-classname: org.jasypt.iv.NoIvGenerator # 3.0.0以后版本必须指定该值, 否则
 
 

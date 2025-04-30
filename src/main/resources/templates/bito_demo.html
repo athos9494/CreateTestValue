@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="UTF-8">
+<head>
+  <title>分页查询动态页面</title>
+  <style>
+    .wrapper {
+      display: flex;
+      flex-wrap: wrap;
+    }
+    .page {
+      background-color: #ccc;
+      padding: 5px;
+      margin: 5px;
+      border-radius: 3px;
+      text-align: center;
+      cursor: pointer;
+    }
+    .active {
+      background-color: #333;
+      color: #fff;
+    }
+  </style>
+  <script>
+    function showPage(page) {
+      // 发送ajax请求，获取当前页数据
+      // 修改页面数据
+      // 修改页码的激活状态
+    }
+  </script>
+</head>
+<body>
+<div class="wrapper">
+  <div class="page active">1</div>
+  <div class="page" onclick="showPage(2)">2</div>
+  <div class="page" onclick="showPage(3)">3</div>
+  <div class="page" onclick="showPage(4)">4</div>
+  <div class="page" onclick="showPage(5)">5</div>
+  <div class="page" onclick="showPage(6)">6</div>
+  <div class="page" onclick="showPage(7)">7</div>
+  <div class="page" onclick="showPage(8)">8</div>
+  <div class="page" onclick="showPage(9)">9</div>
+  <div class="page" onclick="showPage(10)">10</div>
+</div>
+</body>
+</html>

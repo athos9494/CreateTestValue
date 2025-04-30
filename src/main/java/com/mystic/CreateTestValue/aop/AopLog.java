@@ -10,6 +10,8 @@ import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
 import javax.servlet.http.HttpServletRequest;
+import java.time.Duration;
+import java.time.Instant;
 import java.util.Objects;
 
 /**
@@ -26,7 +28,7 @@ public class AopLog {
     /**
      * @deprecated 线程局部的变量, 解决多线程中相同变量的访问冲突问题
      */
-    ThreadLocal<Long> startTime = new ThreadLocal<>();
+    private final ThreadLocal<Instant> beganTime = new ThreadLocal<>();
 
     /**
      * 定义切点,除了controller层
@@ -50,42 +52,37 @@ public class AopLog {
      */
     @Before("aopControllerLog()")
     public void doBeforeControllerWebLog(JoinPoint joinPoint) {
+        beganTime.set(Instant.now());
         logger.info("=====================Start=====================");
-        startTime.set(System.currentTimeMillis());
 //        收到请求,记录请求的内容
         ServletRequestAttributes attributes = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
         HttpServletRequest request = Objects.requireNonNull(attributes).getRequest();
 //        记录请求的内容
-        logger.info("Class Method : " + joinPoint.getSignature().getDeclaringTypeName() + "." + joinPoint.getSignature().getName());
-        logger.info("URL : " + request.getRequestURI());
-        logger.info("HTTP Method : " + request.getMethod());
-        logger.info("Address : " + request.getRemoteAddr());
+        logger.info("请求调用方法 : {}.{}", joinPoint.getSignature().getDeclaringTypeName(), joinPoint.getSignature().getName());
+        logger.info("URL :{} ", request.getRequestURI());
+        logger.info("HTTP Method : {}", request.getMethod());
+        logger.info("Address : {}", request.getRemoteAddr());
     }
 
     /**
      * 记录执行过程中调用的方法 入参和出参
      *
-     * @param joinPoint 入参切片
+     * @param proceedingJoinPoint 入参切片
      * @return 返回结果
      * @throws Throwable 异常抛出
      */
     @Around("aopWebLog()")
-    public Object doAroundWebLog(ProceedingJoinPoint joinPoint) throws Throwable {
+    public Object doAroundWebLog(ProceedingJoinPoint proceedingJoinPoint) throws Throwable {
 //        记录请求和响应的内容
-        Object[] inputs = joinPoint.getArgs();
-        Object rst = joinPoint.proceed();
-        logger.info("Class Method : " + joinPoint.getSignature().getDeclaringTypeName() + "." + joinPoint.getSignature().getName());
+        Object[] inputs = proceedingJoinPoint.getArgs();
+        Object rst = proceedingJoinPoint.proceed();
+        logger.info("执行中调用方法 : {}.{}", proceedingJoinPoint.getSignature().getDeclaringTypeName(), proceedingJoinPoint.getSignature().getName());
         for (int i = 0; i < inputs.length; i++) {
-            if (inputs[i] == null) {
-                logger.info("Input " + i + " : " + "null");
-            } else {
-                logger.info("Input " + i + " : " + inputs[i].toString());
-            }
+            logger.info("Input {}:{}", i, inputs[i] == null ? "null" : inputs[i]);
         }
         if (rst != null) {
-            logger.info("Result : " + rst.toString());
+            logger.info("Result :{} ", rst);
         }
-        ;
         return rst;
     }
 
@@ -96,9 +93,12 @@ public class AopLog {
      */
     @AfterReturning(pointcut = "aopControllerLog()", returning = "rtnObject")
     public void doAfterReturning(Object rtnObject) {
+        Instant start = beganTime.get();
+        Instant end = Instant.now();
+        Duration duration = Duration.between(start, end);
 //        处理完请求返回响应内容
-        logger.info("Response : " + rtnObject);
-        logger.info("Total Time : " + (System.currentTimeMillis() - startTime.get()) + "ms");
+        logger.info("Response : {}", rtnObject);
+        logger.info("Total Time : {}ms", duration.toMillis());
         logger.info("======================End======================");
     }
 
@@ -110,8 +110,7 @@ public class AopLog {
      */
     @AfterThrowing(pointcut = "aopWebLog()", throwing = "ex")
     public void addAfterThrowableLogger(Exception ex) {
-        logger.info("Exception Cause: " + ex);
-        startTime.remove();
-
+        logger.error("Exception Cause: ", ex);
+        beganTime.remove();
     }
 }

@@ -60,7 +60,7 @@
         <td th:text="${person.getId()}"></td>
         <td th:text="${person.getName()}"></td>
         <td th:text="${person.getBirth()}"></td>
-        <td th:text="${person.getId()}"></td>
+        <td th:text="${person.getIdNo()}"></td>
         <td th:text="${person.getAddr()}"></td>
     </tr>
 </table>
@@ -74,6 +74,11 @@
     <a  th:href="@{/queryPerson(pageNum=${pageInfo.getPages()},pageSize=10)}">末页</a>
     总页数: <s th:text="${pageInfo.getPages()}"></s>
     当前页:<s th:text="${pageInfo.getPageNum()}"></s>
+    <span>
+        跳至
+        <input type="text" name="pageSize" >
+        页
+    </span>
 
 </body>
 </html>
